@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os 
-print(os.environ) 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -77,21 +76,35 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'NAME': "sobrandb",
-    'HOST': "aws.connect.psdb.cloud", 
-    'PORT':"3306",
-    'USER': "2cvhqeul0my57u32qzfa",
-    'PASSWORD': "pscale_pw_erPbP6aAOac4GQ9RXDnZdjZciPgSTBAaJcC5Zmwk3Np",
-    'OPTIONS': {
-        'ssl': {
-            'ca': os.environ.get('MYSQL_ATTR_SSL_CA')
-            },'charset': 'utf8mb4',
+# DATABASES = {
+#   'default': {
+#     'ENGINE': 'django.db.backends.mysql',
+#     'NAME': "sobrandb",
+#     'HOST': "aws.connect.psdb.cloud", 
+#     'PORT':"3306",
+#     'USER': "vwxw1n959p08jen78447",
+#     'PASSWORD': "pscale_pw_RsLeX4YAxZWJM8UKRF7HeZwmcI34MPw3DUcAKuE8DME",
+#     'OPTIONS': {
+#         'ssl': {
+#             'ca': os.environ.get('MYSQL_ATTR_SSL_CA')
+#             },'charset': 'utf8mb4',
             
-            }
-  }
+#             }
+#   }
+# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'luzyvida_db',
+        'USER': 'luzyvida_lyv',
+        'PASSWORD':'Casa78##',
+        'HOST': '106.0.62.75',
+        'PORT': '3306',
+        	'OPTIONS': {
+    
+            'sql_mode': 'traditional',
+        }
+    }
 }
 # DATABASES = {
 #     'default': {
