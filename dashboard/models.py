@@ -8,6 +8,7 @@ class SoEmployee(models.Model):
     em_name = models.CharField(max_length=50, blank=True, null=True)
     em_zone = models.IntegerField(blank=True, null=True)
 
+    
     class Meta:
         managed = True
         db_table = 'so_employees'
@@ -22,6 +23,11 @@ class SoOut(models.Model):
     co_date = models.DateField(blank=True, null=True, default=date.today())
     co_time_arrived = models.TimeField(auto_now=True, auto_now_add=False)
     co_time_dif = models.CharField(max_length=45, blank=True, null=True)
+    red_zone_time = models.TimeField(auto_now=False, auto_now_add=False, null=True)
+    yellow_zone_time = models.TimeField(auto_now=False, auto_now_add=False, null=True)
+
+    def __str__(self):
+        return self.co_time_arrived.strftime('%H:%M')
 
     class Meta:
         managed = True

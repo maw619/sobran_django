@@ -2,30 +2,62 @@
 
 {% block content %}
        
-             
-                
-              <div class="w-50 p-3">
-
-                <select
+              {% comment %} <select
                 class="form-control"
                 id="single1"
                 name="single1"
                 size="1"
-                {% comment %} multiple="multiple" {% endcomment %}
+                
                 style="width: 100%" 
               >
                 {% for x in emps %}
                 <option value="{{x.em_name}}">{{x.em_name}}</option>
                 {% endfor %}
               </select>
-  
+              {% endcomment %}
+                
+              <div class="w-25 p-3">
+
+
+
             
               </div>
-      <div class="card mb-4">
+                 <div class="w-25 p-3">
+
+
+                 <form action="" method="post">
+                 <select class="form-select btn btn-warning btn-sm mb-2" name="yellow_dropdown" aria-label="Default select example">
+                <option selected>{{default_yellow}}</option>
+                {% for x in times_yellow %}
+                <option value="{{x}}">{{x}}</option>
+                {% endfor %}
+                </select>
+             
+                <select class="form-select btn btn-danger btn-sm mb-2" name="red_dropdown" aria-label="Default select example">
+                <option selected>{{default_red}}</option>
+                {% for x in times_red %}
+                <option value="{{x}}">{{x}}</option>
+                {% endfor %}
+                </select>
+                    {% csrf_token %}
+                  <div class="form-group">
+                    <label for="birthday">Change Date:</label>
+                    <input type="date" id="date_value" name="date_value" class="form-control">
+                  </div> 
+                  <input type="submit" class="btn btn-secondary">
+                  </form>
+
+
+</div>
+      <div class="card mb-4"> 
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
                                 Transactions for {{date}}
+                                
                             </div>
+                            
+                            <form class="form-inline" action="/action_page.php">
+
                             <div class="card-body">
                                 
                                 <table id="datatablesSimple">
@@ -50,16 +82,16 @@
                                             <th></th>
                                         </tr>
                                     </tfoot>
-                                    {% comment %} <i class="fa fa-pen"></i> {% endcomment %}
+                               
                                     <tbody>
                                         {% for x in sout %}
                                         <tr>
-                                            <td><a href="{% url 'load_so_out' x.co_id_key %}">{{x.co_fk_em_id_key.em_name}}</a> </td> 
+                                            <td><a href="{% url 'view_transaction' x.co_id_key %}">{{x.co_fk_em_id_key.em_name}}</a> </td> 
                                             <td>{{x.co_fk_type_id_key}}</td> 
                                             <td>{{x.co_date}}</td> 
                                             <td>{{x.co_time_arrived}}</td> 
                                             <td>{{x.co_time_dif}}</td> 
-                                            <td><a  data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="fa fa-pen"></i></a></td>
+                                            <td><a href="{% url 'update_so_outs' x.co_id_key  %}"><i class="fa fa-pen"></i></a></td>
                                             <td><a href="{% url 'delete_so_out' x.co_id_key %}" style="color:red"><i class="fa fa-trash"></i></a></td>
                                         </tr>
                                         {% endfor %}
@@ -67,13 +99,30 @@
                                 </table>
                             </div>
                         </div>
-{% comment %} <form action="" method="post">
 
-    <input type="text" id="name" name="name"/>
-    <input type="text" id="date" name="date"/>
-    <input type="text" id="ta_time_arrived" />
-     
-</form> {% endcomment %}
+
+                        <script>
+                            document.getElementById('date_value').addEventListener('change', function () {
+                                var dateValue = this.value; // get the new value of the date field
+
+                                // send an AJAX request to your Django view
+                                $.ajax({
+                                    url: "{% url 'home' %}",
+                                    type: 'POST',
+                                    data: { 'date_value': dateValue },
+                                     beforeSend: function (xhr, settings) {
+                                        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+                                    },
+                                    success: function (response) {
+                                        // update your HTML with the new data
+                                    },
+                                    error: function (response) {
+                                        console.log('Error:', response);
+                                    }
+                                    
+                                });
+                            });
+                        </script>
 
 {% endblock content %}
 

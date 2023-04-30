@@ -55,9 +55,13 @@
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
                                 Admin Panel
                             </a>
-                            <a class="nav-link" href="#"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <a class="nav-link" href="{% url 'add' %}">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-plus"></i></div>
                                 Add Transaction
+                            </a>
+                            <a class="nav-link" href="{% url 'add_employee' %}">
+                                <div class="sb-nav-link-icon"><i class="fa fa-user-plus" aria-hidden="true"></i></div>
+                                Add Employee
                             </a>
                         </div>
                     </div>
@@ -91,20 +95,4 @@
   </div>
 </div>
 
-
-<!-- Update Modal -->
-<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        fdsfsdfds
-        {% include 'updateForm.html' %}
-      </div>
  
-    </div>
-  </div>
-</div>

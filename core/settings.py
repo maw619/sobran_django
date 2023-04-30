@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os 
-
+print(os.environ) 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -78,18 +78,29 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sobrandb',
-        'USER': 'root',
-        'PASSWORD':'2552',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        	'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.mysql',
+    'NAME': os.environ.get('DB_NAME'),
+    'HOST': os.environ.get('DB_HOST'),
+    'PORT': os.environ.get('DB_PORT'),
+    'USER': os.environ.get('DB_USER'),
+    'PASSWORD': os.environ.get('DB_PASSWORD'),
+    'OPTIONS': {'ssl': {'ca': os.environ.get('MYSQL_ATTR_SSL_CA')}}
+  }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'sobrandb',
+#         'USER': 'root',
+#         'PASSWORD':'2552',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#         	'OPTIONS': {
+#             'sql_mode': 'traditional',
+#         }
+#     }
+# }
 
 
 
