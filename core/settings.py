@@ -80,12 +80,17 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.mysql',
-    'NAME': os.environ.get('DB_NAME'),
-    'HOST': os.environ.get('DB_HOST'),
-    'PORT': os.environ.get('DB_PORT'),
-    'USER': os.environ.get('DB_USER'),
-    'PASSWORD': os.environ.get('DB_PASSWORD'),
-    'OPTIONS': {'ssl': {'ca': os.environ.get('MYSQL_ATTR_SSL_CA')}}
+    'NAME': "sobrandb",
+    'HOST': "aws.connect.psdb.cloud", 
+    'PORT':"3306",
+    'USER': "2cvhqeul0my57u32qzfa",
+    'PASSWORD': "pscale_pw_erPbP6aAOac4GQ9RXDnZdjZciPgSTBAaJcC5Zmwk3Np",
+    'OPTIONS': {
+        'ssl': {
+            'ca': os.environ.get('MYSQL_ATTR_SSL_CA')
+            },'charset': 'utf8mb4',
+            
+            }
   }
 }
 # DATABASES = {
@@ -97,6 +102,7 @@ DATABASES = {
 #         'HOST': 'localhost',
 #         'PORT': '3306',
 #         	'OPTIONS': {
+    
 #             'sql_mode': 'traditional',
 #         }
 #     }
