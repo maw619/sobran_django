@@ -16,13 +16,13 @@
                 {% csrf_token %}
           
              
-                <select class="form-select btn btn-warning btn-sm mb-2" name="red_dropdown" aria-label="Default select example">
+                <select class="form-select btn btn-danger btn-sm mb-2" name="red_dropdown" aria-label="Default select example">
                 <option selected>{{default_yellow}}</option>
                 {% for x in times_red %}
                 <option value="{{x}}">{{x}}</option>
                 {% endfor %}
                 </select>
-                       <select class="form-select btn btn-danger btn-sm mb-2" name="yellow_dropdown" aria-label="Default select example">
+                       <select class="form-select btn btn-warning btn-sm mb-2" name="yellow_dropdown" aria-label="Default select example">
                 <option selected>{{default_red}}</option>
                 {% for x in times_yellow %}
                 <option value="{{x}}">{{x}}</option>

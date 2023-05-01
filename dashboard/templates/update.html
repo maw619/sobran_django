@@ -13,6 +13,32 @@
     
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+<script>
+    (function($) {
+    $(document).ready(function() {
+        // Get a reference to the dropdown element
+        var dropdown = $('#my-dropdown');
 
+        // Add an event listener to the dropdown element
+        dropdown.change(function() {
+            // Get the selected value of the dropdown
+            var selected_value = $(this).val();
+
+            // Get a reference to the related field
+            var related_field = $('#Vacation');
+
+            // Update the options of the related field based on the selected value
+            if (selected_value == 'option1') {
+                related_field.html('<option value="1">Option 1</option><option value="2">Option 2</option>');
+            } else if (selected_value == 'option2') {
+                related_field.html('<option value="3">Option 3</option><option value="4">Option 4</option>');
+            } else {
+                related_field.html('<option value="">Select an option</option>');
+            }
+        });
+    });
+})(django.jQuery);
+
+</script>
 {% endblock %}
  

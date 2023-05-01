@@ -4,10 +4,34 @@ from datetime import date, datetime, time
 from .models import SoEmployee, SoOut,SoType
 from django.contrib import messages
 from .forms import AddSoOutsForm, AddEmployeeForm, UpdateoOutsForm
+from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.decorators import login_required
+
+
 
 five = time(hour=5, minute=00, second=00)
 six = time(hour=6, minute=15, second=00)
 
+
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username') 
+        password = request.POST.get('password') 
+        user = authenticate(request, username=username, password=password) 
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.info(request, 'Username or Password is incorrect')
+    return render(request, 'login.html')
+
+
+def logout_user(request):
+    logout(request)
+    messages.success(request, "You Have Been Logged Out...")
+    return redirect('login')
+
+@login_required(login_url='login')
 def home(request):
     today = date.today() 
     emps = SoEmployee.objects.all()  
@@ -28,13 +52,14 @@ def home(request):
     return render(request, 'home.html', context)
 
  
+@login_required(login_url='login')
 def add_sout(request):
-    form = AddSoOutsForm(request.POST or None, initial={'co_time_arrived': datetime.now().time()}) 
+    form = AddSoOutsForm(request.POST or None, initial={'co_time_arrived': datetime.now().time(), 'co_date': date.today()}) 
   
     print(datetime.now().time())
     if request.method == 'POST':
         if form.is_valid():  
-            form.instance.co_date = request.POST.get('date')
+            #form.instance.co_date = request.POST.get('date')
             zone_type = form.instance.co_fk_em_id_key.em_zone
             if zone_type == 1:
                 time = five

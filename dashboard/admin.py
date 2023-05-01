@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import SoEmployee,SoOut,SoType
+from .models import SoEmployee,SoOut,SoType 
+from django.contrib.auth.models import Group
 
 
 
 
  
-
+admin.site.unregister(Group)
 
  
 @admin.register(SoOut)
@@ -25,20 +26,23 @@ class SoOutAdmin(admin.ModelAdmin):
    
  
 
-@admin.register(SoType)
-class SoTypeAdmin(admin.ModelAdmin):
-    list_display = ('type_id_key', 'description')
-    list_filter = ('description',)
-    search_fields = ('description',)
-    ordering = ('description',)
-    list_per_page = 25
-    fieldsets = (
-        ('Type', {
-            'fields': ('description',)
-        }),
-    )
-    def get_ordering(self, request):
-        return ['description']
+# @admin.register(SoType)
+# class SoTypeAdmin(admin.ModelAdmin):
+#     list_display = ('type_id_key', 'description')
+#     list_filter = ('description',)
+#     search_fields = ('description',)
+#     ordering = ('description',)
+#     list_per_page = 25
+#     fieldsets = (
+#         ('Type', {
+#             'fields': ('description',)
+#         }),
+#     )
+#     def get_ordering(self, request):
+#         return ['description']
+
+
+
 
 @admin.register(SoEmployee)
 class SoEmployeeAdmin(admin.ModelAdmin):
