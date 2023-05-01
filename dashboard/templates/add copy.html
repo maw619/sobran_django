@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="{% url 'add_so_out' %}" method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+
+        <select
+        class="form-control"
+        id="single1"
+        name="single1"
+        size="1"
+        
+        style="width: 100%" 
+        >
+        {% for x in sout %}
+        <option value="{{x.co_fk_em_id_key}}">{{x.co_fk_em_id_key}}</option>
+        {% endfor %}
+        </select>
+        
+        {{sout}}
+        
+        <select
+        class="form-control"
+        id="single2"
+        name="single2"
+        size="1"
+        
+        style="width: 100%" 
+        >
+        {% for x in types %}
+        <option value="{{x.description}}">{{x.description}}</option>
+        {% endfor %}
+        </select>
+         
+        <div class="form-group">
+                    <label for="birthday">Date:</label>
+                    <input type="date" id="date" name="date" class="form-control">
+                  </div> 
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock content %}
