@@ -7,38 +7,28 @@
     <div class="mb-3">
 
         {{form.as_p}}
-         
+         <div class="form-group" style="width:25%;">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" class="form-control" required>
+        </div>
       <input type="time" name="time" value="{{time_value}}" />
     </div>
     
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
 <script>
-    (function($) {
-    $(document).ready(function() {
-        // Get a reference to the dropdown element
-        var dropdown = $('#my-dropdown');
+  window.onload = function() {
+    var form = document.querySelector('form');
+    var dateField = document.getElementById("date");
+    dateField.removeAttribute("readonly");
+    dateField.defaultValue = new Date().toISOString().slice(0, 10);
 
-        // Add an event listener to the dropdown element
-        dropdown.change(function() {
-            // Get the selected value of the dropdown
-            var selected_value = $(this).val();
-
-            // Get a reference to the related field
-            var related_field = $('#Vacation');
-
-            // Update the options of the related field based on the selected value
-            if (selected_value == 'option1') {
-                related_field.html('<option value="1">Option 1</option><option value="2">Option 2</option>');
-            } else if (selected_value == 'option2') {
-                related_field.html('<option value="3">Option 3</option><option value="4">Option 4</option>');
-            } else {
-                related_field.html('<option value="">Select an option</option>');
-            }
-        });
+    form.addEventListener("submit", function(event) {
+      dateField.defaultValue = dateField.value;
     });
-})(django.jQuery);
-
+  };
 </script>
+
 {% endblock %}
  

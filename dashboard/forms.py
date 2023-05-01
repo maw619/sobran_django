@@ -49,7 +49,8 @@ class UpdateoOutsForm(ModelForm):
             'co_fk_type_id_key': forms.Select(attrs={'class':'form-select', 'id':'my-dropdown'}),
             #'co_time_arrived': forms.widgets.TimeInput(attrs={'class':'form-control', 'id':'my-field'}),
             'co_time_arrived': forms.HiddenInput(),
-            'co_date': forms.DateInput(attrs={'class':'form-control'}),
+            #'co_date': forms.DateInput(attrs={'class':'form-control'}),
+            'co_date':forms.HiddenInput(),
             'co_time_dif': forms.HiddenInput()
         }
 

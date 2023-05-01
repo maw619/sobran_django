@@ -60,74 +60,65 @@ def add_sout(request):
     if request.method == 'POST':
         if form.is_valid():  
             #form.instance.co_date = request.POST.get('date')
-            zone_type = form.instance.co_fk_em_id_key.em_zone
-            if zone_type == 1:
+            zone = form.instance.co_fk_em_id_key.em_zone
+            if zone == 1:
                 time = five
             else:
                 time = six 
-            type = form.instance.co_fk_type_id_key 
-        
-            print("Marked shift time ", time)
-            print("TYPE ", type) 
-            time_arrived = form.instance.co_time_arrived 
-            messages.success(request, "transaction added")
-            form.save()  
-            if time_arrived is not None:
-                time_diff = datetime.combine(datetime.today(), time_arrived ) - datetime.combine(datetime.today(), time) 
+             
+
+            type_with_name = form.instance.co_fk_type_id_key.description
+            if type_with_name == "Vacation" or type_with_name == "Call-out" or type_with_name == "Personal":
+                form.instance.co_time_arrived = None
+                form.instance.co_time_dif = None 
+                form.save()
+                messages.success(request, f"Marked as {type_with_name}")
+                return redirect('home') 
             else:
-                time_diff = None
-            form.instance.co_time_dif = str(time_diff)[0:4]
-            print("time diff: ", form.instance.co_time_dif)
-            form.save() 
-            return redirect('home')  
+                time_arrived = form.instance.co_time_arrived 
+                messages.success(request, "transaction added")
+                form.save()  
+                if time_arrived is not None:
+                    time_diff = datetime.combine(datetime.today(), time_arrived ) - datetime.combine(datetime.today(), time) 
+                else:
+                    time_diff = None
+                form.instance.co_time_dif = str(time_diff)[0:4]
+                print("time diff: ", form.instance.co_time_dif)
+                form.save() 
+                return redirect('home')  
     context = {'form':form}
     return render(request, 'add.html', context)
 
 
 def update_so_out(request, pk): 
+    
     if request.user.is_authenticated:
         sout = SoOut.objects.get(co_id_key=pk) 
-        form = UpdateoOutsForm(instance=sout)
-        name_before = form.instance.co_fk_em_id_key
-        type_before = form.instance.co_fk_type_id_key
-        date_before = form.instance.co_date
-        time_before = form.instance.co_time_arrived
-        print("name before: ", name_before)
-        print("type before: ", type_before)
-        print("date before: ", date_before)
-        print("time before: ", time_before)
+        form = UpdateoOutsForm(instance=sout) 
+        form.instance.co_date = request.POST.get('date')
 
         if request.method == 'POST':
             form = UpdateoOutsForm(request.POST, instance=sout)
-
-            time_value = request.POST.get('time')
+ 
             print("time arrived: ", form.instance.co_time_arrived)
             form.save()
             zone_type = form.instance.co_fk_em_id_key.em_zone
             if zone_type == 1:
                 time = five
             else:
-                time = six 
-            type = form.instance.co_fk_type_id_key 
-        
-            name_after = form.instance.co_fk_em_id_key
-            type_after = form.instance.co_fk_type_id_key
-            date_after = form.instance.co_date
-            time_after = form.instance.co_time_arrived
+                time = six  
+
+            time_value = request.POST.get('time')
             time_obj = datetime.strptime(time_value, '%H:%M').time()
-            print("name after: ", name_after)
-            print("type after: ", type_after)
-            print("date after: ", date_after)
-            print("time after: ", time_after)
-            print("time_value: ", time_obj)
-            #print("Marked shift time ", time)
-
-
-            #time_arrived = form.instance.co_time_arrived  
+     
+            date_value = request.POST.get('date')
+            date_obj = datetime.strptime(date_value, '%Y-%m-%d').date()
+            print("date obj: ", date_obj)
+            form.instance.co_date = date_obj
             form.instance.co_time_arrived = time_obj
             form.save()  
             if time_obj is not None:
-                time_diff = datetime.combine(datetime.today(), time_obj ) - datetime.combine(datetime.today(), time) 
+                time_diff = datetime.combine(datetime.today(), time_obj) - datetime.combine(datetime.today(), time) 
             else:
                 time_diff = None
             form.instance.co_time_dif = str(time_diff)[0:4]
