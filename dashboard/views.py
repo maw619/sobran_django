@@ -8,10 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 
-
-five = time(hour=5, minute=00, second=00)
-six = time(hour=6, minute=15, second=00)
-
+ 
 
 def login_user(request):
     if request.method == 'POST':
@@ -31,13 +28,15 @@ def logout_user(request):
     messages.success(request, "You Have Been Logged Out...")
     return redirect('login')
 
+
+
 @login_required(login_url='login')
 def home(request):
     today = date.today() 
     emps = SoEmployee.objects.all()  
     emps.order_by('em_name')
     sout = SoOut.objects.filter(co_date=str(today)) 
-    #print(today) 
+
     times_yellow = [time(hour=5, minute=00, second=00),time(hour=6, minute=00, second=00),time(hour=7, minute=00, second=00),time(hour=8, minute=00, second=00)]
     times_red = [time(hour=5, minute=00, second=00),time(hour=6, minute=00, second=00),time(hour=7, minute=00, second=00),time(hour=8, minute=00, second=00)]
     
@@ -48,14 +47,23 @@ def home(request):
         print(today, "if post")
         sout = SoOut.objects.filter(co_date=str(today))  
         context = {'date':today, 'emps': emps, 'sout':sout}
+        return render(request, 'home.html', context)
     context = {'date':today, 'emps': emps, 'sout':sout, 'default_yellow':default_yellow, 'default_red':default_red, 'times_yellow':times_yellow,'times_red':times_red}
     return render(request, 'home.html', context)
+
+
+
+
+
 
  
 @login_required(login_url='login')
 def add_sout(request):
     form = AddSoOutsForm(request.POST or None, initial={'co_time_arrived': datetime.now().time(), 'co_date': date.today()}) 
-  
+    
+    five = time(hour=5, minute=00, second=00)
+    six = time(hour=6, minute=15, second=00)
+
     print(datetime.now().time())
     if request.method == 'POST':
         if form.is_valid():  
@@ -90,6 +98,7 @@ def add_sout(request):
     return render(request, 'add.html', context)
 
 
+@login_required(login_url='login')
 def update_so_out(request, pk): 
     
     if request.user.is_authenticated:
@@ -109,13 +118,16 @@ def update_so_out(request, pk):
                 time = six  
 
             time_value = request.POST.get('time')
-            time_obj = datetime.strptime(time_value, '%H:%M').time()
+            if time_value == "":
+                time_obj = None
+                #time_obj = datetime.strptime(time_value, '%H:%M').time()
      
             date_value = request.POST.get('date')
             date_obj = datetime.strptime(date_value, '%Y-%m-%d').date()
             print("date obj: ", date_obj)
             form.instance.co_date = date_obj
             form.instance.co_time_arrived = time_obj
+             
             form.save()  
             if time_obj is not None:
                 time_diff = datetime.combine(datetime.today(), time_obj) - datetime.combine(datetime.today(), time) 
@@ -148,7 +160,7 @@ def add_so_out(request):
         return render(request, 'add.html', context)
     
     
-
+@login_required(login_url='login')
 def add_employee(request):
     form = AddEmployeeForm(request.POST or None)
     if request.method == 'POST': 
@@ -167,7 +179,7 @@ def view_transaction(request, pk):
 
 
 
-
+@login_required(login_url='login')
 def delete_so_out(request, pk):
     if request.user.is_authenticated:
         sout = SoOut.objects.get(co_id_key=pk)

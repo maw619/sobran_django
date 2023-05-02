@@ -92,27 +92,15 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 #             }
 #   }
 # }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'luzyvida_db',
-        'USER': 'luzyvida_lyv',
-        'PASSWORD':'Casa78##',
-        'HOST': '106.0.62.75',
-        'PORT': '3306',
-        	'OPTIONS': {
-    
-            'sql_mode': 'traditional',
-        }
-    }
-}
+
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'sobrandb',
-#         'USER': 'root',
-#         'PASSWORD':'2552',
-#         'HOST': 'localhost',
+#         'NAME': 'luzyvida_db',
+#         'USER': 'luzyvida_lyv',
+#         'PASSWORD':'Casa78##',
+#         'HOST': '106.0.62.75',
 #         'PORT': '3306',
 #         	'OPTIONS': {
     
@@ -120,6 +108,22 @@ DATABASES = {
 #         }
 #     }
 # }
+
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sobrandb',
+        'USER': 'root',
+        'PASSWORD':'2552',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        	'OPTIONS': { 
+            'sql_mode': 'traditional',
+        }
+    }
+}
 
 
 
