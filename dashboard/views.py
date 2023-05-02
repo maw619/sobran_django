@@ -1,16 +1,16 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from datetime import date, datetime, time
-from .models import SoEmployee, SoOut,SoType
+from .models import SoEmployee, SoOut,SoType,Shift
 from django.contrib import messages
-from .forms import AddSoOutsForm, AddEmployeeForm, UpdateoOutsForm
+from .forms import AddSoOutsForm, AddEmployeeForm, UpdateoOutsForm, AddShiftForm
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
 
 
      
-five = time(hour=5, minute=00, second=00)
-six = time(hour=6, minute=15, second=00)
+# five = time(hour=5, minute=00, second=00)
+# six = time(hour=6, minute=15, second=00)
 
 
 def login_user(request):
@@ -35,47 +35,64 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def home(request):
+    
     today = date.today() 
     emps = SoEmployee.objects.all()  
     emps.order_by('em_name')
     sout = SoOut.objects.filter(co_date=str(today)) 
+    shift = Shift.objects.all()
 
-    times_yellow = [time(hour=5, minute=00, second=00),time(hour=6, minute=00, second=00),time(hour=7, minute=00, second=00),time(hour=8, minute=00, second=00)]
-    times_red = [time(hour=5, minute=00, second=00),time(hour=6, minute=00, second=00),time(hour=7, minute=00, second=00),time(hour=8, minute=00, second=00)]
+    #times_yellow = [time(hour=5, minute=00, second=00),time(hour=6, minute=00, second=00),time(hour=7, minute=00, second=00),time(hour=8, minute=00, second=00)]
+    #times_red = [time(hour=5, minute=00, second=00),time(hour=6, minute=00, second=00),time(hour=7, minute=00, second=00),time(hour=8, minute=00, second=00)]
     
-    default_yellow = five
-    default_red = six
+    form = AddShiftForm()
+ 
+    shift = Shift.objects.all()
+    for x in shift:
+        y_start = x.yellow_start
+        r_start = x.red_start
+
+    print(request.POST.get('yellow_start'))
     if request.method == 'POST':
         today = request.POST.get('date_value') 
-        print(today, "if post")
+        date_value = datetime.strptime(today, '%Y-%m-%d').date()
         sout = SoOut.objects.filter(co_date=str(today))  
-        context = {'date':today, 'emps': emps, 'sout':sout}
+        context = {'date':date_value, 'emps': emps, 'sout':sout, 'yellow_start':str(y_start),'red_start':str(r_start)}
         return render(request, 'home.html', context)
-    context = {'date':today, 'emps': emps, 'sout':sout, 'default_yellow':default_yellow, 'default_red':default_red, 'times_yellow':times_yellow,'times_red':times_red}
+    elif 'form2_submit' in request.POST:
+        form = AddShiftForm(request.POST or None)
+        form.instance.yellow_start = request.POST.get('yellow_start')
+        form.instance.red_start = request.POST.get('red_start')
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    context = {'date':today, 'emps': emps, 'sout':sout, 'yellow_start':str(y_start),'red_start':str(r_start)}
     return render(request, 'home.html', context)
 
 
-
-
-
-
+  
  
 @login_required(login_url='login')
 def add_sout(request):
-    form = AddSoOutsForm(request.POST or None, initial={'co_time_arrived': datetime.now().time(), 'co_date': date.today()}) 
 
+    shift = Shift.objects.all()
+    for x in shift:
+        y_start = x.yellow_start
+        r_start = x.red_start
+
+    form = AddSoOutsForm(request.POST or None, initial={'co_time_arrived': datetime.now().time(), 'co_date': date.today()}) 
     print(datetime.now().time())
     if request.method == 'POST':
         if form.is_valid():  
             #form.instance.co_date = request.POST.get('date')
             zone = form.instance.co_fk_em_id_key.em_zone
             if zone == 1:
-                time = five
+                time = y_start
             else:
-                time = six  
+                time = r_start  
 
             type_with_name = form.instance.co_fk_type_id_key.description
-            if type_with_name == "Vacation" or type_with_name == "Call-out" or type_with_name == "Personal":
+            if type_with_name == "Vacation" or type_with_name == "Call-out" or type_with_name == "Left early":
                 form.instance.co_time_arrived = None
                 form.instance.co_time_dif = None 
                 form.save()
@@ -100,7 +117,10 @@ def add_sout(request):
 
 @login_required(login_url='login')
 def update_so_out(request, pk): 
-    
+    shift = Shift.objects.all()
+    for x in shift:
+        y_start = x.yellow_start
+        r_start = x.red_start
     if request.user.is_authenticated:
         sout = SoOut.objects.get(co_id_key=pk) 
         form = UpdateoOutsForm(instance=sout) 
@@ -111,11 +131,11 @@ def update_so_out(request, pk):
  
             print("time arrived: ", form.instance.co_time_arrived)
             form.save()
-            zone_type = form.instance.co_fk_em_id_key.em_zone
-            if zone_type == 1:
-                time = five
+            zone = form.instance.co_fk_em_id_key.em_zone
+            if zone == 1:
+                time = y_start
             else:
-                time = six  
+                time = r_start  
 
             time_value = request.POST.get('time')
             if time_value == "":
@@ -145,6 +165,7 @@ def update_so_out(request, pk):
 
 #not used
 def add_so_out(request): 
+    
     emps = SoEmployee.objects.all()  
     types = SoType.objects.all()
     if request.method == 'POST':

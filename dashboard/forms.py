@@ -2,7 +2,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.forms import ModelForm
-from.models import SoOut, SoEmployee
+from.models import SoOut, SoEmployee, Shift
+ 
 
 
 
@@ -67,3 +68,22 @@ class AddEmployeeForm(ModelForm):
             'em_name' : forms.widgets.TextInput(attrs={'class':'form-control'}),
             'em_zone' : forms.widgets.TextInput(attrs={'class':'form-control'})
         }
+
+class AddShiftForm(ModelForm):
+    class Meta:
+        model = Shift
+        exclude = ['sh_id_key']
+        labels = {
+            'sh_name': 'Name',
+            'sh_start': 'Start',
+            'sh_end': 'End'
+        }
+
+        widgets = {
+            'sh_name' : forms.HiddenInput(),
+            'sh_start' : forms.HiddenInput(),
+            'sh_end' : forms.HiddenInput(),
+        }
+
+class AddCalendarForm(forms.Form):
+    date = forms.DateField(widget=forms.HiddenInput())

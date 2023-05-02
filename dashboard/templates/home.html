@@ -19,30 +19,33 @@
                
 <div id="time-section" class="m-auto p-5">
 
-            <form action="" method="post" class="justify-content-end">
+
+            <form action="{% url 'home' %}" method="post">
                 {% csrf_token %}
-          
-             
-                <select class="form-select btn btn-danger btn-sm mb-2" name="red_dropdown" aria-label="Default select example">
-                <option selected>{{default_yellow}}</option>
-                {% for x in times_red %}
-                <option value="{{x}}">{{x}}</option>
-                {% endfor %}
-                </select>
-                       <select class="form-select btn btn-warning btn-sm mb-2" name="yellow_dropdown" aria-label="Default select example">
-                <option selected>{{default_red}}</option>
-                {% for x in times_yellow %}
-                <option value="{{x}}">{{x}}</option>
-                {% endfor %}
-                </select>
-                
-                  <div class="form-group">
-                    <label for="birthday">Change Date:</label>
-                    <input type="date" id="date_value" name="date_value" class="form-control" required>
-                  </div> 
-                  <br>
-                  <input type="submit" class="btn btn-secondary">
+                 <input type="time" name="yellow_start" id="yellow_start" value="{{yellow_start}}" class="btn btn-warning" required />
+                 <br>
+                 <br>
+                 <input type="time" name="red_start" id="red_start" value="{{red_start}}" class="btn btn-danger" required/>
+                 <button name="form_submit" class="btn btn-primary">Set Time</button>
             </form>
+
+ 
+<form action="" method="post" class="justify-content-end" id="form2">
+    {% csrf_token %}
+  <div class="col-auto">
+    <label for="date_value">Change Date:</label>
+     <input type="date" id="date_value" name="date_value" class="form-control" value="{{default_yellow}}" required>
+  </div>
+ 
+  <div class="col-auto">
+    <input type="submit" name="form2_submit" class="btn btn-secondary">
+  </div>
+</form>
+
+
+
+
+ 
 
 
  </div>
@@ -131,6 +134,14 @@
                             });
                         </script>
   
+{% comment %} <script>
+    // Get the input element
+var myTimeField = document.getElementById("my-time-field-1");
+
+// Set the default value to 12:00 PM
+myTimeField.value = "12:00";
+</script>
+                         {% endcomment %}
 {% endblock content %}
 
 

@@ -15,7 +15,7 @@ class SoOutAdmin(admin.ModelAdmin):
     list_filter = ('co_fk_em_id_key', 'co_fk_type_id_key', 'co_date', 'co_time_arrived', 'co_time_dif')
     search_fields = ('co_fk_em_id_key', 'co_fk_type_id_key', 'co_date', 'co_time_arrived', 'co_time_dif')
     ordering = ('co_fk_type_id_key', ) 
-    list_per_page = 25 
+    list_per_page = 35 
     
     fieldsets = (
         ('Employee', {
@@ -28,11 +28,12 @@ class SoOutAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         
-        if obj.co_fk_type_id_key.description == 'Vacation':
+        if obj.co_fk_type_id_key.description == 'Vacation' or obj.co_fk_type_id_key.description == 'Call-out' or obj.co_fk_type_id_key.description == 'Left early' or obj.co_fk_type_id_key.description == '':
+            
+            form.cleaned_data['co_fk_type_id_key'] = None
             obj.co_time_arrived = None
-            obj.co_time_dif = None  
-            zone = form.instance.co_fk_em_id_key.em_zone 
-            obj.co_time_dif = None 
+            obj.co_time_dif = None
+            zone = form.instance.co_fk_em_id_key.em_zone  
             return super().save_model(request, obj, form, change) 
         else:
             obj.co_time_arrived = form.cleaned_data['co_time_arrived'] 
@@ -40,21 +41,22 @@ class SoOutAdmin(admin.ModelAdmin):
             zone = form.instance.co_fk_em_id_key.em_zone
 
             time_arrival = obj.co_time_arrived = form.cleaned_data['co_time_arrived']
-            print(time_arrival)
-            five = time(hour=5, minute=00, second=00)
-            six = time(hour=6, minute=15, second=00)
-            if zone == 1:
-                time2 = five
-            else:
-                time2 = six  
-                 
-            timedelta_obj = datetime.combine(datetime.today(), time_arrival) - datetime.combine(datetime.today(), time2)
-            seconds = timedelta_obj.total_seconds()
-            hours = int(seconds // 3600)
-            minutes = int((seconds // 60) % 60)
-            seconds = int(seconds % 60)
-            formatted_time = f"{hours:02}:{minutes:02}:{seconds:02}"
-            obj.co_time_dif = formatted_time
+            if time_arrival is not None:
+                print(time_arrival)
+                five = time(hour=5, minute=00, second=00)
+                six = time(hour=6, minute=15, second=00)
+                if zone == 1:
+                    time2 = five
+                else:
+                    time2 = six  
+                    
+                timedelta_obj = datetime.combine(datetime.today(), time_arrival) - datetime.combine(datetime.today(), time2)
+                seconds = timedelta_obj.total_seconds()
+                hours = int(seconds // 3600)
+                minutes = int((seconds // 60) % 60)
+                seconds = int(seconds % 60)
+                formatted_time = f"{hours:02}:{minutes:02}:{seconds:02}"
+                obj.co_time_dif = formatted_time
             super().save_model(request, obj, form, change)
             
 

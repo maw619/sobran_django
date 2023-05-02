@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import date,datetime
+from datetime import date,datetime,time
 
 
 class SoEmployee(models.Model):
@@ -39,4 +39,16 @@ class SoType(models.Model):
         db_table = 'so_types'
     def __str__(self) -> str:
         return self.description
+    
+class Shift(models.Model):
+    yellow_start = models.TimeField(blank=True, null=True, verbose_name='Yellow Start', default=time(hour=6, minute=15))
+    red_start = models.TimeField(blank=True, null=True, verbose_name='Red Start', default=time(hour=5, minute=00))
 
+    class Meta:
+        managed = True
+        db_table = 'shiftstart'
+
+    def save(self, *args, **kwargs):
+        # Delete existing Shift object before saving new one
+        Shift.objects.exclude(id=self.id).delete()
+        super().save(*args, **kwargs)
