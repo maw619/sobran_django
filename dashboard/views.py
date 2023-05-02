@@ -8,7 +8,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 
- 
+     
+five = time(hour=5, minute=00, second=00)
+six = time(hour=6, minute=15, second=00)
+
 
 def login_user(request):
     if request.method == 'POST':
@@ -60,9 +63,6 @@ def home(request):
 @login_required(login_url='login')
 def add_sout(request):
     form = AddSoOutsForm(request.POST or None, initial={'co_time_arrived': datetime.now().time(), 'co_date': date.today()}) 
-    
-    five = time(hour=5, minute=00, second=00)
-    six = time(hour=6, minute=15, second=00)
 
     print(datetime.now().time())
     if request.method == 'POST':
