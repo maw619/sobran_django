@@ -1,9 +1,9 @@
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark"  id="mynav">
             <!-- Navbar Brand-->
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'home' %}">
+            <div class="container-fluid" >
+                <a class="navbar-brand" href="{% url 'home' %}" style="padding:10px;">
                     {% load static %}
-                    <img src="{% static 'sobranLogo.png' %}" style="margin-left: 20px;" alt="Logo" width="60" height="54"
+                    <img src="{% static 'sobranLogo.png' %}" alt="Logo" width="60" height="54"
                         class="d-inline-block align-text-top">
               
                 </a>
@@ -12,7 +12,7 @@
             
 
 
-            <nav class="navbar bg-body-tertiary"> 
+            <nav class="navbar bg-body-tertiary" > 
             </nav>
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->

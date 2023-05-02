@@ -72,8 +72,7 @@ def add_sout(request):
             if zone == 1:
                 time = five
             else:
-                time = six 
-             
+                time = six  
 
             type_with_name = form.instance.co_fk_type_id_key.description
             if type_with_name == "Vacation" or type_with_name == "Call-out" or type_with_name == "Personal":
@@ -94,6 +93,7 @@ def add_sout(request):
                 print("time diff: ", form.instance.co_time_dif)
                 form.save() 
                 return redirect('home')  
+            
     context = {'form':form}
     return render(request, 'add.html', context)
 
@@ -120,8 +120,8 @@ def update_so_out(request, pk):
             time_value = request.POST.get('time')
             if time_value == "":
                 time_obj = None
-                #time_obj = datetime.strptime(time_value, '%H:%M').time()
-     
+            else:
+                time_obj = datetime.strptime(time_value, '%H:%M').time()
             date_value = request.POST.get('date')
             date_obj = datetime.strptime(date_value, '%Y-%m-%d').date()
             print("date obj: ", date_obj)
